@@ -1,0 +1,321 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Root Design Tokens ──────────────────────────────────────── */
+:root {
+  --background: #050505;
+  --surface: #0d0d0d;
+  --card: #111111;
+  --border: #1a1a1a;
+  --accent-green: #22c55e;
+  --accent-green-dim: #16a34a;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1a1;
+  --text-muted: #525252;
+  --red-stress: #ef4444;
+  --orange-warn: #f97316;
+  --yellow-warn: #eab308;
+}
+
+/* ─── Base Reset ──────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── Custom Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}
+
+/* ─── Selection ───────────────────────────────────────────────── */
+::selection {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #ffffff;
+}
+
+/* ─── Utility Classes ─────────────────────────────────────────── */
+@layer utilities {
+  .text-gradient-green {
+    background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-white {
+    background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .glass-green {
+    background: rgba(34, 197, 94, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(34, 197, 94, 0.15);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2), 0 0 60px rgba(34, 197, 94, 0.1);
+  }
+
+  .glow-green-sm {
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.15);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+  }
+
+  .noise-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.03;
+  }
+
+  .border-gradient {
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    background-image: linear-gradient(#111, #111),
+      linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(255, 255, 255, 0.05));
+    background-origin: border-box;
+  }
+
+  .clip-hex {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+}
+
+/* ─── Component Classes ───────────────────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full
+           bg-accent-green text-black font-semibold text-sm tracking-wide
+           transition-all duration-300 hover:bg-green-400 hover:scale-105
+           hover:shadow-[0_0_30px_rgba(34,197,94,0.4)]
+           active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full
+           glass text-white font-semibold text-sm tracking-wide
+           transition-all duration-300 hover:border-accent-green/30
+           hover:bg-accent-green/5 hover:scale-105
+           active:scale-95;
+  }
+
+  .section-label {
+    @apply inline-flex items-center gap-2 text-accent-green text-xs
+           font-semibold uppercase tracking-[0.2em] mb-4;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .stat-card {
+    @apply glass rounded-2xl p-6 flex flex-col gap-2;
+  }
+
+  .hud-label {
+    @apply absolute glass-dark rounded-lg px-3 py-2 text-xs font-mono
+           text-accent-green border border-accent-green/20
+           flex items-center gap-2;
+  }
+}
+
+/* ─── Section Base ────────────────────────────────────────────── */
+section {
+  position: relative;
+}
+
+/* ─── Video Background ────────────────────────────────────────── */
+.video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* ─── Scan Line Animation ─────────────────────────────────────── */
+@keyframes scanMove {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.6), transparent);
+  animation: scanMove 3s linear infinite;
+  z-index: 10;
+}
+
+/* ─── Grid Overlay ────────────────────────────────────────────── */
+.grid-overlay {
+  background-image: 
+    linear-gradient(rgba(34, 197, 94, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 197, 94, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Drone Glow Effect ───────────────────────────────────────── */
+.drone-glow {
+  filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.3))
+          drop-shadow(0 0 60px rgba(34, 197, 94, 0.15));
+}
+
+/* ─── Heatmap Colors ──────────────────────────────────────────── */
+.zone-healthy { background: rgba(34, 197, 94, 0.6); }
+.zone-stressed { background: rgba(239, 68, 68, 0.6); }
+.zone-warning { background: rgba(249, 115, 22, 0.5); }
+
+/* ─── Particle ────────────────────────────────────────────────── */
+@keyframes particleFloat {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.6);
+  animation: particleFloat linear infinite;
+}
+
+/* ─── Flow Lines (Architecture) ──────────────────────────────── */
+@keyframes flowPulse {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.flow-line {
+  stroke-dasharray: 8 4;
+  animation: flowPulse 3s linear infinite;
+}
+
+/* ─── Cinematic Transitions ───────────────────────────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Holographic Border ──────────────────────────────────────── */
+@keyframes borderRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.holo-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(34, 197, 94, 0.5) 90deg,
+    transparent 180deg,
+    rgba(34, 197, 94, 0.3) 270deg,
+    transparent 360deg
+  );
+  border-radius: inherit;
+  animation: borderRotate 4s linear infinite;
+  z-index: -1;
+}
+
+/* ─── Loading / Reveal ────────────────────────────────────────── */
+.reveal-clip {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-clip.revealed {
+  clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%);
+}
+
+/* ─── Dashboard UI ────────────────────────────────────────────── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ─── Mobile Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hud-label {
+    @apply text-[10px] px-2 py-1;
+  }
+}
+
+/* ─── Print ───────────────────────────────────────────────────── */
+@media print {
+  body { background: white; color: black; }
+}
