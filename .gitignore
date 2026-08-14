@@ -35,3 +35,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python
+backend/.venv
+backend/__pycache__
+backend/**/__pycache__
+pi-agent/.venv
+pi-agent/__pycache__
+pi-agent/**/__pycache__
+
+# device secrets / local buffers (should never exist in this repo anyway,
+# only on the Pi itself, but belt-and-suspenders)
+*.key
+*.sqlite3

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X, Zap, LogOut, LayoutDashboard } from "lucide-react";
+import { useAuth } from "@/lib/auth/AuthContext";
 
 const navLinks = [
   { label: "Technology", href: "#technology" },
@@ -18,6 +20,8 @@ export default function Navbar() {
   const [activeLink, setActiveLink] = useState("");
   const lastScrollY = useRef(0);
   const [visible, setVisible] = useState(true);
+  const { user, status, logout } = useAuth();
+  const isAuthenticated = status === "authenticated" && !!user;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,15 +85,36 @@ export default function Navbar() {
 
             {/* CTA */}
             <div className="hidden md:flex items-center gap-4">
-              <a
-                href="#contact"
-                className="text-sm font-medium text-text-secondary hover:text-white transition-colors"
-              >
-                Contact
-              </a>
-              <a href="#demo" className="btn-primary text-sm py-2.5 px-6">
-                Request Demo
-              </a>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-1.5 text-sm font-medium text-text-secondary hover:text-white transition-colors"
+                  >
+                    <LayoutDashboard size={15} />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="flex items-center gap-1.5 text-sm font-medium text-text-secondary hover:text-red-400 transition-colors"
+                  >
+                    <LogOut size={15} />
+                    Log Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="text-sm font-medium text-text-secondary hover:text-white transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link href="/signup" className="btn-primary text-sm py-2.5 px-6">
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -128,16 +153,55 @@ export default function Navbar() {
                   {link.label}
                 </motion.a>
               ))}
-              <motion.a
-                href="#demo"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="btn-primary w-fit"
-                onClick={() => setMenuOpen(false)}
-              >
-                Request Demo
-              </motion.a>
+              {isAuthenticated ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-col gap-4"
+                >
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMenuOpen(false)}
+                    className="btn-primary w-fit"
+                  >
+                    <LayoutDashboard size={16} />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 text-red-400 text-lg font-semibold w-fit"
+                  >
+                    <LogOut size={18} />
+                    Log Out
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-col gap-4"
+                >
+                  <Link
+                    href="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="btn-ghost w-fit"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setMenuOpen(false)}
+                    className="btn-primary w-fit"
+                  >
+                    Get Started
+                  </Link>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}

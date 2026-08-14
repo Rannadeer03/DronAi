@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
+import { AuthProvider } from "@/lib/auth/AuthContext";
 
 const LoadingScreen = dynamic(() => import("@/components/ui/LoadingScreen"), {
   ssr: false,
@@ -32,11 +33,11 @@ export default function ClientLayout({
   }, []);
 
   return (
-    <>
+    <AuthProvider>
       <LoadingScreen />
       <ScrollProgress />
       <CursorGlow />
       {children}
-    </>
+    </AuthProvider>
   );
 }
