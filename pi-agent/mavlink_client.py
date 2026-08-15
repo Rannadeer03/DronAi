@@ -41,7 +41,16 @@ class MavlinkClient:
 
     def connect(self, heartbeat_timeout: float = 30.0) -> None:
         self.master = mavutil.mavlink_connection(self.connection_string)
-        self.master.wait_heartbeat(timeout=heartbeat_timeout)
+        # wait_heartbeat() returns None on timeout instead of raising, so a
+        # dead/unwired link would otherwise fall through and get marked
+        # connected — main.py has no try/except around connect(), and relies
+        # on this raising to trigger the systemd crash-restart loop.
+        heartbeat = self.master.wait_heartbeat(timeout=heartbeat_timeout)
+        if heartbeat is None:
+            raise TimeoutError(
+                f"no MAVLink heartbeat received within {heartbeat_timeout}s "
+                f"on {self.connection_string!r}"
+            )
         with self._state_lock:
             self._state["connected"] = True
 
