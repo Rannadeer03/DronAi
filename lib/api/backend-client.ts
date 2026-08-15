@@ -14,14 +14,24 @@ async function authorizedFetch(path: string, init: RequestInit = {}) {
     throw new BackendApiError("Not signed in.");
   }
 
-  const res = await fetch(`${BACKEND_HTTP_URL}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${session.access_token}`,
-      ...init.headers,
-    },
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${BACKEND_HTTP_URL}${path}`, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`,
+        ...init.headers,
+      },
+    });
+  } catch {
+    // fetch() rejects with a plain TypeError (not a Response) for network-
+    // level failures — backend down, DNS, connection refused. Without this,
+    // that error isn't a BackendApiError and callers fall back to a generic
+    // "Could not pair this drone." message, hiding that the backend was
+    // simply unreachable.
+    throw new BackendApiError("Cannot reach the DronAI backend — check that it's running and reachable.");
+  }
 
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {
