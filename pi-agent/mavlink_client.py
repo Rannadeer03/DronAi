@@ -28,8 +28,9 @@ class _Waiter:
 
 
 class MavlinkClient:
-    def __init__(self, connection_string: str) -> None:
+    def __init__(self, connection_string: str, baud: int = 57600) -> None:
         self.connection_string = connection_string
+        self.baud = baud
         self.master = None
         self._state: dict = {"connected": False, "armed": False}
         self._state_lock = threading.Lock()
@@ -40,7 +41,10 @@ class MavlinkClient:
         self._thread: Optional[threading.Thread] = None
 
     def connect(self, heartbeat_timeout: float = 30.0) -> None:
-        self.master = mavutil.mavlink_connection(self.connection_string)
+        # baud is ignored by pymavlink for udp:/tcp: connection strings and
+        # only consumed for real serial devices, so passing it unconditionally
+        # is safe for both SITL/network and hardware connections.
+        self.master = mavutil.mavlink_connection(self.connection_string, baud=self.baud)
         # wait_heartbeat() returns None on timeout instead of raising, so a
         # dead/unwired link would otherwise fall through and get marked
         # connected — main.py has no try/except around connect(), and relies
