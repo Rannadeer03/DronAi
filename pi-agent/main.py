@@ -13,7 +13,7 @@ logger = logging.getLogger("dronai.agent")
 
 class Agent:
     def __init__(self) -> None:
-        self.mavlink = MavlinkClient(config.MAVLINK_CONNECTION)
+        self.mavlink = MavlinkClient(config.MAVLINK_CONNECTION, config.MAVLINK_BAUD)
         self.local_log = LocalLog(config.LOCAL_DB_PATH)
         private_key = identity.load(config.KEY_PATH)
         self.backend = BackendClient(config.BACKEND_WS_URL, config.DEVICE_UID, private_key)

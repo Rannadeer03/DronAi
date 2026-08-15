@@ -27,6 +27,33 @@ def test_connect_marks_connected_on_real_heartbeat():
     mock_master.wait_heartbeat.assert_called_once_with(timeout=5.0)
 
 
+def test_connect_passes_configured_baud_to_mavlink_connection():
+    client = MavlinkClient("/dev/serial0", baud=57600)
+    mock_master = MagicMock()
+    mock_master.wait_heartbeat.return_value = MagicMock()
+
+    with patch("mavlink_client.mavutil.mavlink_connection", return_value=mock_master) as mock_connect:
+        client.connect()
+
+    mock_connect.assert_called_once_with("/dev/serial0", baud=57600)
+
+
+def test_connect_passes_overridden_baud_to_mavlink_connection():
+    client = MavlinkClient("/dev/serial0", baud=115200)
+    mock_master = MagicMock()
+    mock_master.wait_heartbeat.return_value = MagicMock()
+
+    with patch("mavlink_client.mavutil.mavlink_connection", return_value=mock_master) as mock_connect:
+        client.connect()
+
+    mock_connect.assert_called_once_with("/dev/serial0", baud=115200)
+
+
+def test_mavlink_client_defaults_to_57600_when_baud_not_given():
+    client = MavlinkClient("/dev/serial0")
+    assert client.baud == 57600
+
+
 def test_connect_raises_and_stays_disconnected_on_heartbeat_timeout():
     client = MavlinkClient("/dev/serial0")
     mock_master = MagicMock()

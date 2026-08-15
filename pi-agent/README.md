@@ -25,6 +25,7 @@ overwrite an existing key.
 export DRONAI_DEVICE_UID=DRA-000001
 export DRONAI_BACKEND_WS_URL=wss://your-backend/ws/device
 export MAVLINK_CONNECTION=/dev/serial0   # or udp:127.0.0.1:14550 for SITL
+export MAVLINK_BAUD=57600                # Pixhawk TELEM default; ignored for udp:/tcp:
 python3 main.py
 ```
 
