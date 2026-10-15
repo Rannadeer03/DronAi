@@ -12,6 +12,7 @@ const navLinks = [
   { label: "Solution", href: "#solution" },
   { label: "Dashboard", href: "#dashboard" },
   { label: "Vision", href: "#vision" },
+  { label: "Team", href: "#team" },
 ];
 
 export default function Navbar() {
@@ -66,7 +67,7 @@ export default function Navbar() {
             </motion.a>
 
             {/* Desktop Links */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-4 lg:gap-8">
               {navLinks.map((link) => (
                 <a
                   key={link.href}

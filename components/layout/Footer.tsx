@@ -5,7 +5,7 @@ import { Zap, Twitter, Linkedin, Github, ArrowUpRight } from "lucide-react";
 
 const links = {
   Product: ["Technology", "Platform", "Analytics", "API"],
-  Company: ["About", "Careers", "Press", "Contact"],
+  Company: ["About", "Team", "Careers", "Press", "Contact"],
   Resources: ["Documentation", "Case Studies", "Blog", "Partners"],
 };
 
@@ -55,7 +55,7 @@ export default function Footer() {
                 {items.map((item) => (
                   <li key={item}>
                     <a
-                      href="#"
+                      href={item === "Team" || item === "About" ? "#team" : item === "Contact" ? "#contact" : "#"}
                       className="text-text-secondary text-sm hover:text-white transition-colors inline-flex items-center gap-1 group"
                     >
                       {item}

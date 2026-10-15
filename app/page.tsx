@@ -11,6 +11,7 @@ import PrecisionSpray from "@/components/sections/PrecisionSpray";
 import Dashboard from "@/components/sections/Dashboard";
 import TechArch from "@/components/sections/TechArch";
 import Vision from "@/components/sections/Vision";
+import Team from "@/components/sections/Team";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
       <Dashboard />
       <TechArch />
       <Vision />
+      <Team />
       <Footer />
     </main>
   );
